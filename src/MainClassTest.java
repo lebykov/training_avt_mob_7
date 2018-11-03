@@ -3,6 +3,8 @@ import org.junit.Test;
 
 public class MainClassTest
 {
+    private MainClass mainClass= new MainClass();
+
     @Test
     public void testGetLocalNumber()
     {
@@ -17,13 +19,26 @@ public class MainClassTest
     @Test
     public void testGetClassNumber()
     {
-        MainClass mainClass = new MainClass();
         int expected = 45;
-        int actual = mainClass.getClassNumber();
+        int actual = this.mainClass.getClassNumber();
         Assert.assertTrue(
                 "getClassNumber() returned " + actual + " instead of a number larger than " + expected,
                 actual > expected
         );
 
+    }
+
+    @Test
+    public void testGetClassString()
+    {
+        String upperCaseFirstLetter = "Hello";
+        String lowerCaseFirstLetter = "hello";
+        String actual = this.mainClass.getClassString();
+        Assert.assertTrue(
+                "getClassString() expected to return a string containing \""
+                        + upperCaseFirstLetter + "\" or \"" + lowerCaseFirstLetter
+                        + "\" but returned \"" + actual + "\"",
+                actual.contains(upperCaseFirstLetter) || actual.contains(lowerCaseFirstLetter)
+        );
     }
 }
