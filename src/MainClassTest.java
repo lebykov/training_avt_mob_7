@@ -13,4 +13,17 @@ public class MainClassTest
                 actual == expected
         );
     }
+
+    @Test
+    public void testGetClassNumber()
+    {
+        MainClass mainClass = new MainClass();
+        int expected = 45;
+        int actual = mainClass.getClassNumber();
+        Assert.assertTrue(
+                "getClassNumber() returned " + actual + " instead of a number larger than " + expected,
+                actual > expected
+        );
+
+    }
 }
