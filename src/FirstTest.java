@@ -133,6 +133,30 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testSearchFieldText()
+    {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        WebElement search_field = waitForElementPresent(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find search field",
+                5
+        );
+
+        String search_field_text = search_field.getAttribute("text");
+
+        Assert.assertEquals(
+                "Unexpected text in search field",
+                "Search…",
+                search_field_text
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
