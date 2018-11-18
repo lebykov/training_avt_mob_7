@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
 
@@ -154,6 +155,50 @@ public class FirstTest {
                 "Unexpected text in search field",
                 "Search…",
                 search_field_text
+        );
+    }
+
+    @Test
+    public void testCancelSearchSuggestions()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "parrot",
+                "Cannot find search input",
+                15
+        );
+
+        WebElement search_results_list = waitForElementPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                "Cannot find search results list",
+                15
+        );
+
+        List<WebElement> search_result_titles = search_results_list.findElements(
+                By.id("org.wikipedia:id/page_list_item_title")
+        );
+
+        Assert.assertTrue(
+                "There are no elements in search results",
+                search_result_titles.size() > 0
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find 'X' to cancel search",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                "Search results list is still on the screen",
+                5
         );
     }
 
