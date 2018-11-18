@@ -9,9 +9,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.everyItem;
 
 import java.net.URL;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FirstTest {
 
@@ -200,6 +203,57 @@ public class FirstTest {
                 "Search results list is still on the screen",
                 5
         );
+    }
+
+    @Test
+    public void testSearchResultsRelevance()
+    {
+        String searchRequest = "parrot";
+
+        // move to search screen
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        // type in search request
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                searchRequest,
+                "Cannot find search input",
+                15
+        );
+
+        // wait for results list
+        WebElement search_results_list = waitForElementPresent(
+                By.id("org.wikipedia:id/search_results_list"),
+                "Cannot find search results list",
+                15
+        );
+
+        // get title elements from search result list
+        List<WebElement> search_result_titles = search_results_list.findElements(
+                By.id("org.wikipedia:id/page_list_item_title")
+        );
+
+        // check that there are actually some result elements
+        Assert.assertTrue(
+                "There are no elements in search results",
+                search_result_titles.size() > 0
+        );
+
+        // extract title strings from elements
+        List<String> title_text_list = search_result_titles.stream()
+                .map(WebElement::getText)
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+
+        // assert there is search request substring in every title string
+        Assert.assertThat(
+                "Some result titles doesn't contain word '" + searchRequest + "'",
+                title_text_list,
+                everyItem(containsString(searchRequest.toLowerCase())));
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds)
