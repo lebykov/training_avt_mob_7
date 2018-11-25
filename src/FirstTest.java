@@ -33,6 +33,9 @@ public class FirstTest {
         capabilities.setCapability("appActivity",".main.MainActivity");
         capabilities.setCapability("app","/Users/abykov/side_projects/training_avt_mob_7/apks/org.wikipedia.apk");
 
+        // Ex7. Set screen orientation to PORTRAIT orientation before each test
+        capabilities.setCapability("orientation", "PORTRAIT");
+
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
 
@@ -762,6 +765,38 @@ public class FirstTest {
         assertElementPresent(
                 By.id("org.wikipedia:id/view_page_title_text"),
                 "No page title found"
+        );
+    }
+
+    // Ex7. Fail in LANDSCAPE orientation
+    @Test
+    public void testFailAfterRotation()
+    {
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        // intentionally fail this test
+        Assert.assertEquals(
+                driver.getOrientation().value(),
+                ScreenOrientation.PORTRAIT.value()
+        );
+    }
+
+    // Ex7. Check if orientation after failed test has been restored to PORTRAIT
+    @Test
+    public void testStartOrientation()
+    {
+        String currentOrientation = driver.getOrientation().value();
+        System.out.println("currentOrientation is " + currentOrientation);
+        Assert.assertEquals(
+                "Screen orientation supposed to be portrait, but got " + currentOrientation,
+                ScreenOrientation.PORTRAIT.value(),
+                currentOrientation
         );
     }
 
