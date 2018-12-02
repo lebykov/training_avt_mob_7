@@ -2,7 +2,16 @@ package tests;
 
 import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
+import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.everyItem;
 
 public class SearchTests extends CoreTestCase
 {
@@ -70,5 +79,28 @@ public class SearchTests extends CoreTestCase
 
         searchPageObject.clickCancelSearch();
         searchPageObject.waitForSearchResultsListNotPresent();
+    }
+
+    // Refactor Ex4
+    @Test
+    public void testSearchResultsRelevance()
+    {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        String searchRequest = "parrot";
+        searchPageObject.typeSearchLine(searchRequest);
+        int number_of_found_articles = searchPageObject.getAmountOfFoundArticles();
+
+        assertTrue(
+                "There are no elements in search results",
+                number_of_found_articles > 0
+        );
+
+        List<String> title_text_list = searchPageObject.getListOfResultsTitles();
+
+        Assert.assertThat(
+                "Some result titles doesn't contain word '" + searchRequest + "'",
+                title_text_list,
+                everyItem(containsString(searchRequest.toLowerCase())));
     }
 }

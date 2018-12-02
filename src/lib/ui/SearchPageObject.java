@@ -1,7 +1,13 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SearchPageObject extends MainPageObject {
 
@@ -12,7 +18,8 @@ public class SearchPageObject extends MainPageObject {
         SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
         SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
         SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
-        SEARCH_RESULTS_LIST = "org.wikipedia:id/search_results_list";
+        SEARCH_RESULTS_LIST = "org.wikipedia:id/search_results_list",
+        SEARCH_RESULT_TITLE_ELEMENT = "org.wikipedia:id/page_list_item_title";
 
     public SearchPageObject(AppiumDriver driver)
     {
@@ -98,5 +105,28 @@ public class SearchPageObject extends MainPageObject {
                 "Search results list is still on the screen",
                 5
         );
+    }
+
+    public List<String> getListOfResultsTitles()
+    {
+        // wait for results list
+        WebElement search_results_list = this.waitForElementPresent(
+                By.id(SEARCH_RESULTS_LIST),
+                "Cannot find search results list",
+                15
+        );
+
+        // get title elements from search result list
+        List<WebElement> search_result_titles = search_results_list.findElements(
+                By.id(SEARCH_RESULT_TITLE_ELEMENT)
+        );
+
+        // extract title strings from elements
+        List<String> title_text_list = search_result_titles.stream()
+                .map(WebElement::getText)
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+
+        return title_text_list;
     }
 }
