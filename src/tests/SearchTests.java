@@ -52,4 +52,23 @@ public class SearchTests extends CoreTestCase
         searchPageObject.waitForEmptyResultsLabel();
         searchPageObject.assertThereIsNoResultOfSearch();
     }
+
+    // Ex8. Refactor test from Ex3
+    @Test
+    public void testCancelSearchSuggestions()
+    {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        String searchLine = "parrot";
+        searchPageObject.typeSearchLine(searchLine);
+        int number_of_found_articles = searchPageObject.getAmountOfFoundArticles();
+
+        assertTrue(
+                "There are no elements in search results",
+                number_of_found_articles > 0
+        );
+
+        searchPageObject.clickCancelSearch();
+        searchPageObject.waitForSearchResultsListNotPresent();
+    }
 }

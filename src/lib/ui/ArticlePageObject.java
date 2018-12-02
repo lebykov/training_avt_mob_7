@@ -14,7 +14,8 @@ public class ArticlePageObject extends MainPageObject
         ADD_TO_MY_LIST_OVERLAY = "org.wikipedia:id/onboarding_button",
         MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input",
         MY_LIST_OK_BUTTON = "android:id/button1",
-        CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']";
+        CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']",
+        NAME_OF_FOLDER_TPL = "//*[@resource-id='org.wikipedia:id/item_container']//*[@text='{FOLDER}']";
 
     public ArticlePageObject(AppiumDriver driver)
     {
@@ -89,5 +90,41 @@ public class ArticlePageObject extends MainPageObject
                 "Cannot close article, cannot find X link",
                 5
         );
+    }
+
+    // Ex8
+    private static String getFolderXpathByFolderName(String name_of_folder)
+    {
+        return NAME_OF_FOLDER_TPL.replace("{FOLDER}", name_of_folder);
+    }
+
+    public void addArticleToExistingList(String name_of_folder)
+    {
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_BUTTON),
+                "Cannot find button to open article options",
+                5
+        );
+
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_ADD_TO_MY_READING_LIST),
+                "Cannot find option to add article to reading list",
+                5
+        );
+
+        String folderXpath = getFolderXpathByFolderName(name_of_folder);
+        this.waitForElementAndClick(
+                By.xpath(folderXpath),
+                "Cannot find folder " + name_of_folder + " to save second article to",
+                5
+        );
+    }
+
+    public void assertArticleHasTitleElement()
+    {
+        this.assertElementPresent(
+            By.id(TITLE),
+            "No page title found"
+    );
     }
 }
