@@ -4,11 +4,8 @@ import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.everyItem;
@@ -102,5 +99,27 @@ public class SearchTests extends CoreTestCase
                 "Some result titles doesn't contain word '" + searchRequest + "'",
                 title_text_list,
                 everyItem(containsString(searchRequest.toLowerCase())));
+    }
+
+    // Ex9
+    @Test
+    public void testFirstThreeSearchResultsByTitleAndDescription()
+    {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        String searchRequest = "Kotlin";
+        searchPageObject.typeSearchLine(searchRequest);
+        searchPageObject.waitForElementByTitleAndDescription(
+                "Kotlin (programming language)",
+                "Programming language"
+        );
+        searchPageObject.waitForElementByTitleAndDescription(
+                "Kotlin-class destroyer",
+                "Class of Soviet cold-war destroyers"
+        );
+        searchPageObject.waitForElementByTitleAndDescription(
+                "Kotlin Island",
+                "Island"
+        );
     }
 }

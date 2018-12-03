@@ -1,11 +1,9 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +17,9 @@ public class SearchPageObject extends MainPageObject {
         SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
         SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
         SEARCH_RESULTS_LIST = "org.wikipedia:id/search_results_list",
-        SEARCH_RESULT_TITLE_ELEMENT = "org.wikipedia:id/page_list_item_title";
+        SEARCH_RESULT_TITLE_ELEMENT = "org.wikipedia:id/page_list_item_title",
+        SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL =
+                "//*[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{TITLE}']//following-sibling::*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{DESCRIPTION}']";
 
     public SearchPageObject(AppiumDriver driver)
     {
@@ -30,6 +30,15 @@ public class SearchPageObject extends MainPageObject {
     private static String getResultSearchElement(String substring)
     {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+    /* TEMPLATE METHOD */
+
+    /* TEMPLATE METHOD */
+    private static String getResultSearchElementXpathByTitleAndDescription(String title, String description)
+    {
+        return SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL
+                .replace("{TITLE}", title)
+                .replace("{DESCRIPTION}", description);
     }
     /* TEMPLATE METHOD */
 
@@ -128,5 +137,15 @@ public class SearchPageObject extends MainPageObject {
                 .collect(Collectors.toList());
 
         return title_text_list;
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description)
+    {
+        String elementXpath = getResultSearchElementXpathByTitleAndDescription(title, description);
+        this.waitForElementPresent(
+                By.xpath(elementXpath),
+                "Cannot find element with title '" + title + "' and description '" + description + "'",
+                15
+        );
     }
 }
