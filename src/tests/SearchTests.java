@@ -7,8 +7,8 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.everyItem;
+//import static org.hamcrest.CoreMatchers.containsString;
+//import static org.hamcrest.CoreMatchers.everyItem;
 
 public class SearchTests extends CoreTestCase
 {
@@ -95,10 +95,10 @@ public class SearchTests extends CoreTestCase
 
         List<String> title_text_list = searchPageObject.getListOfResultsTitles();
 
-        Assert.assertThat(
-                "Some result titles doesn't contain word '" + searchRequest + "'",
-                title_text_list,
-                everyItem(containsString(searchRequest.toLowerCase())));
+//        Assert.assertThat(
+//                "Some result titles doesn't contain word '" + searchRequest + "'",
+//                title_text_list,
+//                everyItem(containsString(searchRequest.toLowerCase())));
     }
 
     // Ex9
