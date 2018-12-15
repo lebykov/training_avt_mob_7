@@ -75,4 +75,19 @@ public class WelcomePageObject extends MainPageObject
                 10
         );
     }
+
+    public void passThroughWelcomePage()
+    {
+        this.waitForLearnMoreLink();
+        this.clickOnNextButton();
+
+        this.waitForNewWaysToExploreText();
+        this.clickOnNextButton();
+
+        this.waitForAddOrEditPreferredLangText();
+        this.clickOnNextButton();
+
+        this.waitForLearnMoreAboutDataCollectedText();
+        this.clickGetStartedButton();
+    }
 }

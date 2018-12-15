@@ -1,6 +1,7 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileBy;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
@@ -177,8 +178,18 @@ public class MainPageObject {
             return By.xpath(locator);
         } else if (by_type.equals("id")) {
             return By.id(locator);
+        } else if (by_type.equals("predicate")) {
+            return MobileBy.iOSNsPredicateString(locator);
         } else {
             throw new IllegalArgumentException("Cannot get type of locator. Locator: " + locator_with_type);
         }
+    }
+
+    public WebElement waitForElementToBeClickable(String locator, String error_message, long timeoutInSeconds)
+    {
+        By by = this.getLocatorByString(locator);
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + "\n");
+        return wait.until(ExpectedConditions.elementToBeClickable(by));
     }
 }
