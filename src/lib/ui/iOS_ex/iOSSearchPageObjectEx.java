@@ -1,9 +1,9 @@
-package lib.ui.iOS;
+package lib.ui.iOS_ex;
 
 import io.appium.java_client.AppiumDriver;
 import lib.ui.MainPageObject;
 
-public class iOSSearchPageObject extends MainPageObject {
+public class iOSSearchPageObjectEx extends MainPageObject {
     private static final String
             SEARCH_INIT_ELEMENT = "predicate:type=='XCUIElementTypeSearchField' and name=='Search Wikipedia'",
             SEARCH_INPUT = "xpath://XCUIElementTypeImage[@name='search']//preceding-sibling::XCUIElementTypeSearchField",
@@ -20,7 +20,7 @@ public class iOSSearchPageObject extends MainPageObject {
     }
     /* TEMPLATE METHOD */
 
-    public iOSSearchPageObject(AppiumDriver driver)
+    public iOSSearchPageObjectEx(AppiumDriver driver)
     {
         super(driver);
     }

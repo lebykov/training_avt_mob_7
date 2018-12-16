@@ -1,10 +1,10 @@
-package lib.ui.iOS;
+package lib.ui.iOS_ex;
 
 import io.appium.java_client.AppiumDriver;
 import lib.ui.MainPageObject;
 import org.openqa.selenium.WebElement;
 
-public class iOSArticlePageObject extends MainPageObject
+public class iOSArticlePageObjectEx extends MainPageObject
 {
     private static final String
             TITLE_TPL = "predicate:type=='XCUIElementTypeOther' and name=='{TITLE}'",
@@ -21,7 +21,7 @@ public class iOSArticlePageObject extends MainPageObject
             GO_HOME_TOOLTIP = "predicate:type=='XCUIElementTypeStaticText' AND name=='Tap to go home'",
             READING_LIST_TPL = "id:{LIST_NAME}";
 
-    public iOSArticlePageObject(AppiumDriver driver)
+    public iOSArticlePageObjectEx(AppiumDriver driver)
     {
         super(driver);
     }

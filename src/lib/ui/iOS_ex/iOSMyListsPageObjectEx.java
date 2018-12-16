@@ -1,9 +1,9 @@
-package lib.ui.iOS;
+package lib.ui.iOS_ex;
 
 import io.appium.java_client.AppiumDriver;
 import lib.ui.MainPageObject;
 
-public class iOSMyListsPageObject extends MainPageObject {
+public class iOSMyListsPageObjectEx extends MainPageObject {
     private static final String
             READING_LISTS_BUTTON = "id:Reading lists",
             FOLDER_BY_NAME_TPL = "id:{FOLDER_NAME}",
@@ -28,7 +28,7 @@ public class iOSMyListsPageObject extends MainPageObject {
     }
     /* TEMPLATE METHOD */
 
-    public iOSMyListsPageObject(AppiumDriver driver)
+    public iOSMyListsPageObjectEx(AppiumDriver driver)
     {
         super(driver);
     }

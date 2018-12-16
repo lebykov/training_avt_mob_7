@@ -1,14 +1,14 @@
 package tests.iOS;
 
-import lib.iOSTestCase;
+import lib.CoreTestCase;
 import lib.ui.*;
-import lib.ui.iOS.iOSArticlePageObject;
-import lib.ui.iOS.iOSMyListsPageObject;
-import lib.ui.iOS.iOSNavigationUI;
-import lib.ui.iOS.iOSSearchPageObject;
+import lib.ui.iOS_ex.iOSArticlePageObjectEx;
+import lib.ui.iOS_ex.iOSMyListsPageObjectEx;
+import lib.ui.iOS_ex.iOSNavigationUIEx;
+import lib.ui.iOS_ex.iOSSearchPageObjectEx;
 import org.junit.Test;
 
-public class IosMyListsTests extends iOSTestCase
+public class IosMyListsTests extends CoreTestCase
 {
 
     // Ex 10
@@ -21,7 +21,7 @@ public class IosMyListsTests extends iOSTestCase
         // 1.1. Saving first article
         String articleToRemoveSearchLine = "Asd RNA motif";
 
-        iOSSearchPageObject searchPageObject = new iOSSearchPageObject(driver);
+        iOSSearchPageObjectEx searchPageObject = new iOSSearchPageObjectEx(driver);
         searchPageObject.initSearchInput();
         searchPageObject.waitForAddLanguagesTooltipToDisappear();
         searchPageObject.typeSearchLine(articleToRemoveSearchLine);
@@ -29,7 +29,7 @@ public class IosMyListsTests extends iOSTestCase
         searchPageObject.waitForSearchResultToBeClickableByTitle(articleToRemoveTitle);
         searchPageObject.clickByArticleWithTitle(articleToRemoveTitle);
 
-        iOSArticlePageObject articlePageObject = new iOSArticlePageObject(driver);
+        iOSArticlePageObjectEx articlePageObject = new iOSArticlePageObjectEx(driver);
         articlePageObject.waitForGoHomeTooltipDissappear();
         articlePageObject.waitForTitleElement(articleToRemoveTitle);
         String name_of_folder = "Short articles";
@@ -50,10 +50,10 @@ public class IosMyListsTests extends iOSTestCase
         articlePageObject.closeArticle();
 
         // 2. Navigate to list and delete article
-        iOSNavigationUI navigationUI = new iOSNavigationUI(driver);
+        iOSNavigationUIEx navigationUI = new iOSNavigationUIEx(driver);
         navigationUI.clickSavedButton();
 
-        iOSMyListsPageObject myListsPageObject = new iOSMyListsPageObject(driver);
+        iOSMyListsPageObjectEx myListsPageObject = new iOSMyListsPageObjectEx(driver);
         myListsPageObject.clickReadingListsButton();
         myListsPageObject.openFolderByName(name_of_folder);
         myListsPageObject.removeArticleByTitle(articleToRemoveTitle);

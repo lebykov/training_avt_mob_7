@@ -2,19 +2,22 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
+import lib.Platform;
 
-public class ArticlePageObject extends MainPageObject
+abstract public class ArticlePageObject extends MainPageObject
 {
-    private static final String
-        TITLE = "id:org.wikipedia:id/view_page_title_text",
-        FOOTER = "xpath://*[@text='View page in browser']",
-        OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-        OPTIONS_ADD_TO_MY_READING_LIST = "xpath://*[@text='Add to reading list']",
-        ADD_TO_MY_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-        MY_LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-        MY_LIST_OK_BUTTON = "id:android:id/button1",
-        CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
-        NAME_OF_FOLDER_TPL = "xpath://*[@resource-id='org.wikipedia:id/item_container']//*[@text='{FOLDER}']";
+    protected static String
+        TITLE,
+        FOOTER,
+        OPTIONS_BUTTON,
+        OPTIONS_ADD_TO_MY_READING_LIST,
+        ADD_TO_MY_LIST_OVERLAY,
+        MY_LIST_NAME_INPUT,
+        MY_LIST_OK_BUTTON,
+        CLOSE_ARTICLE_BUTTON,
+        NAME_OF_FOLDER_TPL,
+        SYNC_SAVED_ARTICLES_POPUP_TITLE,
+        SYNC_SAVED_ARTICLES_POPUP_CLOSE_BUTTON;
 
     public ArticlePageObject(AppiumDriver driver)
     {
@@ -29,16 +32,31 @@ public class ArticlePageObject extends MainPageObject
     public String getArticleTitle()
     {
         WebElement titleElement = waitForTitleElement();
-        return titleElement.getAttribute("text");
+
+        if (Platform.getInstance().isAndroid()) {
+            return titleElement.getAttribute("text");
+        } else {
+            return titleElement.getAttribute("name");
+        }
+
+
     }
 
     public void swipeToFooter()
     {
-        this.swipeUpToFindElement(
-                FOOTER,
-                "Cannot find the end of article",
-                20
-        );
+        if (Platform.getInstance().isAndroid()) {
+            this.swipeUpToFindElement(
+                    FOOTER,
+                    "Cannot find the end of article",
+                    20
+            );
+        } else {
+            this.swipeUpTillElementAppear(
+                    FOOTER,
+                    "Cannot find the end of article",
+                    40
+            );
+        }
     }
 
     public void addArticleToMyList(String name_of_folder)
@@ -87,6 +105,29 @@ public class ArticlePageObject extends MainPageObject
                 CLOSE_ARTICLE_BUTTON,
                 "Cannot close article, cannot find X link",
                 5
+        );
+    }
+
+    public void closeSyncSavedArticlesPopup()
+    {
+        this.waitForElementPresent(
+                SYNC_SAVED_ARTICLES_POPUP_TITLE,
+                "Cannot find Sync Saved Articles title text",
+                10
+        );
+        this.waitForElementAndClick(
+                SYNC_SAVED_ARTICLES_POPUP_CLOSE_BUTTON,
+                "Cannot find Sync Saved Articles Close Button",
+                10
+        );
+    }
+
+    public void addArticlesToMySaved()
+    {
+        this.waitForElementAndClick(
+                OPTIONS_ADD_TO_MY_READING_LIST,
+                "Cannot find option to add article to reading list",
+                10
         );
     }
 
