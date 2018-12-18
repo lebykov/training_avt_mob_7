@@ -16,6 +16,7 @@ public class IOSSearchPageObject extends SearchPageObject
         SEARCH_RESULT_TITLE_ELEMENT = "id:org.wikipedia:id/page_list_item_title";
         SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL =
                 "xpath://*[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{TITLE}']//following-sibling::*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{DESCRIPTION}']";
+        CLEAR_SEARCH_FIELD_BUTTON = "id:clear mini";
     }
 
     public IOSSearchPageObject(AppiumDriver driver)

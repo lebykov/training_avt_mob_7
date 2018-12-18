@@ -19,8 +19,8 @@ public class ArticleTests extends CoreTestCase
         searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        articlePageObject.waitForTitleElement();
-        String article_title = articlePageObject.getArticleTitle();
+        articlePageObject.waitForTitleElement("Java (programming language)");
+        String article_title = articlePageObject.getArticleTitle("Java (programming language)");
 
         assertEquals(
                 "We see unexpected title",
@@ -39,7 +39,7 @@ public class ArticleTests extends CoreTestCase
         searchPageObject.clickByArticleWithSubstring("Asd RNA motif");
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        articlePageObject.waitForTitleElement();
+        articlePageObject.waitForTitleElement("Java (programming language)");
         articlePageObject.swipeToFooter();
     }
 
@@ -54,6 +54,6 @@ public class ArticleTests extends CoreTestCase
         searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        articlePageObject.assertArticleHasTitleElement();
+        articlePageObject.assertArticleHasTitleElement("Java (programming language)");
     }
 }

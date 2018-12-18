@@ -25,8 +25,8 @@ public class MyListsTests extends CoreTestCase
         searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        articlePageObject.waitForTitleElement();
-        String article_title = articlePageObject.getArticleTitle();
+        articlePageObject.waitForTitleElement("Java (programming language)");
+        String article_title = articlePageObject.getArticleTitle("Java (programming language)");
 
         if (Platform.getInstance().isAndroid()) {
             articlePageObject.addArticleToMyList(name_of_folder);
@@ -48,13 +48,14 @@ public class MyListsTests extends CoreTestCase
         myListsPageObject.swipeByArticleToDelete(article_title);
     }
 
-    // Ex8. Refactor test from Ex5
+    // Ex10. Refactor test from Ex5
     @Test
     public void testSaveTwoArticlesToMyList()
     {
         // 1. Save two articles
         // 1.1. Saving first article
         String articleToRemoveSearchLine = "Java";
+        String articleToRemoveTitle = "Java (programming language)";
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
@@ -62,21 +63,34 @@ public class MyListsTests extends CoreTestCase
         searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
         ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
-        articlePageObject.waitForTitleElement();
-        String articleToRemoveTitle = articlePageObject.getArticleTitle();
-        String name_of_folder = "Learning programming";
-        articlePageObject.addArticleToMyList(name_of_folder);
+        articlePageObject.waitForTitleElement(articleToRemoveTitle);
+//        String articleToRemoveTitle = articlePageObject.getArticleTitle(articleToRemoveTitle);
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.addArticleToMyList(name_of_folder);
+        } else {
+            articlePageObject.addArticlesToMySaved();
+            articlePageObject.closeSyncSavedArticlesPopup();
+        }
         articlePageObject.closeArticle();
 
         // 1.2. Saving second article
         String articleToKeepSearchLine = "Kotlin";
+        String articleToKeepTitle = "Kotlin (programming language)";
+
         searchPageObject.initSearchInput();
+        if (Platform.getInstance().isIOS()) {
+            searchPageObject.clearSearchField();
+        }
         searchPageObject.typeSearchLine(articleToKeepSearchLine);
         searchPageObject.clickByArticleWithSubstring("Programming language");
 
-        articlePageObject.waitForTitleElement();
-        String articleToKeepTitle = articlePageObject.getArticleTitle();
-        articlePageObject.addArticleToExistingList(name_of_folder);
+        articlePageObject.waitForTitleElement(articleToKeepTitle);
+//        String articleToKeepTitle = articlePageObject.getArticleTitle(articleToKeepTitle);
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.addArticleToExistingList(name_of_folder);
+        } else {
+            articlePageObject.addArticlesToMySaved();
+        }
         articlePageObject.closeArticle();
 
         // 2. Navigate to list and delete article
@@ -84,27 +98,45 @@ public class MyListsTests extends CoreTestCase
         navigationUI.clickMyLists();
 
         MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
-        myListsPageObject.openFolderByName(name_of_folder);
+        if (Platform.getInstance().isAndroid()) {
+            myListsPageObject.openFolderByName(name_of_folder);
+        }
         myListsPageObject.swipeByArticleToDelete(articleToRemoveTitle);
-        int amountOfSavedArticles = myListsPageObject.getAmountOfSavedArticles();
 
-        assertEquals(
-                "There supposed to remain 1 saved article, but got " + amountOfSavedArticles,
-                1,
-                amountOfSavedArticles
-        );
 
-        // 3. Open remaining article
-        myListsPageObject.openArticleByTitle(articleToKeepTitle);
+        if (Platform.getInstance().isAndroid()) {
+            int amountOfSavedArticles = myListsPageObject.getAmountOfSavedArticles();
 
-        // 4. Assert that remaining article is the article to keep
-        articlePageObject.waitForTitleElement();
-        String titleOfRemainingArticle = articlePageObject.getArticleTitle();
+            assertEquals(
+                    "There supposed to remain 1 saved article, but got " + amountOfSavedArticles,
+                    1,
+                    amountOfSavedArticles
+            );
 
-        assertEquals(
-                "Title of remaining article supposed to be '"  + articleToKeepTitle + "', but got '" + titleOfRemainingArticle + "'",
-                articleToKeepTitle,
-                titleOfRemainingArticle
-        );
+            // 3. Open remaining article
+            myListsPageObject.openArticleByTitle(articleToKeepTitle);
+
+            // 4. Assert that remaining article is the article to keep
+            articlePageObject.waitForTitleElement(articleToKeepTitle);
+            String titleOfRemainingArticle = articlePageObject.getArticleTitle(articleToKeepTitle);
+
+            assertEquals(
+                    "Title of remaining article supposed to be '"  + articleToKeepTitle + "', but got '" + titleOfRemainingArticle + "'",
+                    articleToKeepTitle,
+                    titleOfRemainingArticle
+            );
+        } else {
+            // Search saved articles with title of article to keep and
+            // assert that there is exactly one article in the results
+//            myListsPageObject.searchSavedArticlesByTitle(articleToKeepTitle);
+            myListsPageObject.searchSavedArticlesByTitle("ASDAFD");
+            int amountOfFilteredSavedArticles = myListsPageObject.getNumberOfFilteredArticles();
+
+            assertEquals(
+                    "There supposed to 1 saved article in the search results, but got " + amountOfFilteredSavedArticles,
+                    1,
+                    amountOfFilteredSavedArticles
+            );
+        }
     }
 }

@@ -18,7 +18,8 @@ abstract public class SearchPageObject extends MainPageObject {
         SEARCH_EMPTY_RESULT_ELEMENT,
         SEARCH_RESULTS_LIST,
         SEARCH_RESULT_TITLE_ELEMENT,
-        SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL;
+        SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL,
+        CLEAR_SEARCH_FIELD_BUTTON;
 
     public SearchPageObject(AppiumDriver driver)
     {
@@ -144,6 +145,15 @@ abstract public class SearchPageObject extends MainPageObject {
                 elementXpath,
                 "Cannot find element with title '" + title + "' and description '" + description + "'",
                 15
+        );
+    }
+
+    public void clearSearchField()
+    {
+        this.waitForElementAndClick(
+                CLEAR_SEARCH_FIELD_BUTTON,
+                "Cannot find and click on clear search field button",
+                10
         );
     }
 }

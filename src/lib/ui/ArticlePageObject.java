@@ -7,7 +7,7 @@ import lib.Platform;
 abstract public class ArticlePageObject extends MainPageObject
 {
     protected static String
-        TITLE,
+        TITLE_TPL,
         FOOTER,
         OPTIONS_BUTTON,
         OPTIONS_ADD_TO_MY_READING_LIST,
@@ -19,19 +19,29 @@ abstract public class ArticlePageObject extends MainPageObject
         SYNC_SAVED_ARTICLES_POPUP_TITLE,
         SYNC_SAVED_ARTICLES_POPUP_CLOSE_BUTTON;
 
+    private static String getTitleLocatorByTitle(String title)
+    {
+        if (Platform.getInstance().isAndroid()) {
+            return TITLE_TPL;
+        } else {
+            return TITLE_TPL.replace("{TITLE}", title);
+        }
+    }
+
     public ArticlePageObject(AppiumDriver driver)
     {
         super(driver);
     }
 
-    public WebElement waitForTitleElement()
+    public WebElement waitForTitleElement(String title)
     {
-        return this.waitForElementPresent(TITLE, "Cannot find article title", 15);
+        String title_locator = getTitleLocatorByTitle(title);
+        return this.waitForElementPresent(title_locator, "Cannot find article title", 15);
     }
 
-    public String getArticleTitle()
+    public String getArticleTitle(String title)
     {
-        WebElement titleElement = waitForTitleElement();
+        WebElement titleElement = waitForTitleElement(title);
 
         if (Platform.getInstance().isAndroid()) {
             return titleElement.getAttribute("text");
@@ -159,10 +169,11 @@ abstract public class ArticlePageObject extends MainPageObject
         );
     }
 
-    public void assertArticleHasTitleElement()
+    public void assertArticleHasTitleElement(String title)
     {
+        String title_locator = getTitleLocatorByTitle(title);
         this.assertElementPresent(
-            TITLE,
+             title_locator,
             "No page title found"
     );
     }

@@ -8,7 +8,9 @@ abstract public class MyListsPageObject extends MainPageObject {
     protected static String
             FOLDER_BY_NAME_TPL,
             ARTICLE_BY_TITLE_TPL,
-            SAVED_ARTICLE_CONTAINER;
+            SAVED_ARTICLE_CONTAINER,
+            SEARCH_SAVED_INPUT,
+            FILTERED_ARTICLE;
 
     private static String getFolderXpathByName(String name_of_folder)
     {
@@ -87,6 +89,28 @@ abstract public class MyListsPageObject extends MainPageObject {
                 "Cannot click to open article with title " + article_title,
                 5
         );
+    }
+
+    // Ex 10
+    public void searchSavedArticlesByTitle(String title)
+    {
+        this.waitForElementToBeClickable(
+                SEARCH_SAVED_INPUT,
+                "Search reading list is not clickable",
+                10
+        );
+
+        this.waitForElementAndSendKeys(
+                SEARCH_SAVED_INPUT,
+                title,
+                "Cannot find and send keys to Search reading list input",
+                10
+        );
+    }
+
+    public int getNumberOfFilteredArticles()
+    {
+        return this.getAmountOfElements(FILTERED_ARTICLE);
     }
 
 
