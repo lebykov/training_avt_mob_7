@@ -128,8 +128,7 @@ public class MyListsTests extends CoreTestCase
         } else {
             // Search saved articles with title of article to keep and
             // assert that there is exactly one article in the results
-//            myListsPageObject.searchSavedArticlesByTitle(articleToKeepTitle);
-            myListsPageObject.searchSavedArticlesByTitle("ASDAFD");
+            myListsPageObject.searchSavedArticlesByTitle(articleToKeepTitle);
             int amountOfFilteredSavedArticles = myListsPageObject.getNumberOfFilteredArticles();
 
             assertEquals(
